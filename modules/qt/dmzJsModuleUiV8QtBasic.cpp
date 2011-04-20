@@ -175,14 +175,14 @@ dmz::JsModuleUiV8QtBasic::create_v8_qobject (QObject *value) {
             QWidget *widget = qobject_cast<QWidget *>(value);
             if (widget) { result = create_v8_qwidget (widget); }
          }
-         else if (value->inherits ("Phonon::MediaObject")) {
+//         else if (value->inherits ("Phonon::MediaObject")) {
 
-            if (!_mediaObjectCtor.IsEmpty ()) {
+//            if (!_mediaObjectCtor.IsEmpty ()) {
 
-               vobj = _mediaObjectCtor->NewInstance();
-               qobj = new V8QtMediaObject (vobj, value, &_state);
-            }
-         }
+//               vobj = _mediaObjectCtor->NewInstance();
+//               qobj = new V8QtMediaObject (vobj, value, &_state);
+//            }
+//         }
          else if (value->inherits ("QAction")) {
 
             if (!_actionCtor.IsEmpty ()) {
@@ -298,14 +298,14 @@ dmz::JsModuleUiV8QtBasic::create_v8_qwidget (QWidget *value) {
                qobj = new V8QtObject (vobj, value, &_state);
             }
          }
-         else if (value->inherits ("Phonon::VideoWidget")) {
+//         else if (value->inherits ("Phonon::VideoWidget")) {
 
-            if (!_videoWidgetCtor.IsEmpty ()) {
+//            if (!_videoWidgetCtor.IsEmpty ()) {
 
-               vobj = _videoWidgetCtor->NewInstance ();
-               qobj = new V8QtWidget (vobj, value, &_state);
-            }
-         }
+//               vobj = _videoWidgetCtor->NewInstance ();
+//               qobj = new V8QtWidget (vobj, value, &_state);
+//            }
+//         }
 //         else if (value->inherits ("QWebView")) {
 
 //            vobj = _webviewCtor->NewInstance ();
@@ -1024,9 +1024,9 @@ dmz::JsModuleUiV8QtBasic::update_js_ext_v8_state (const StateEnum State) {
             "dmz/ui/event",
             _eventApi.get_new_instance ());
 
-         _state.core->register_interface (
-            "dmz/ui/phonon",
-            _phononApi.get_new_instance ());
+//         _state.core->register_interface (
+//            "dmz/ui/phonon",
+//            _phononApi.get_new_instance ());
 
       }
 
@@ -1286,7 +1286,7 @@ dmz::JsModuleUiV8QtBasic::update_js_ext_v8_state (const StateEnum State) {
       _treeApi.clear ();
 //      _webviewApi.clear ();
 
-      _phononApi.clear ();
+//      _phononApi.clear ();
 
       _widgetApi.clear ();
 
@@ -1687,9 +1687,9 @@ dmz::JsModuleUiV8QtBasic::_init (Config &local) {
    _init_gscene_mouse_event ();
    _init_resize_event ();
 
-   _init_media_object ();
-   _init_video_player ();
-   _init_phonon ();
+//   _init_media_object ();
+//   _init_video_player ();
+//   _init_phonon ();
 }
 
 
