@@ -247,22 +247,22 @@ dmz::JsModuleUiV8QtBasic::create_v8_qobject (QObject *value) {
                qobj = new V8QtObject (vobj, value, &_state);
             }
          }
-         else if (value->inherits ("QWebPage")) {
+//         else if (value->inherits ("QWebPage")) {
 
-            if (!_webpageCtor.IsEmpty ()) {
+//            if (!_webpageCtor.IsEmpty ()) {
 
-               vobj = _webpageCtor->NewInstance ();
-               qobj = new V8QtObject (vobj, value, &_state);
-            }
-         }
-         else if (value->inherits ("QWebFrame")) {
+//               vobj = _webpageCtor->NewInstance ();
+//               qobj = new V8QtObject (vobj, value, &_state);
+//            }
+//         }
+//         else if (value->inherits ("QWebFrame")) {
 
-            if (!_webframeCtor.IsEmpty ()) {
+//            if (!_webframeCtor.IsEmpty ()) {
 
-               vobj = _webframeCtor->NewInstance ();
-               qobj = new V8QtObject (vobj, value, &_state);
-            }
-         }
+//               vobj = _webframeCtor->NewInstance ();
+//               qobj = new V8QtObject (vobj, value, &_state);
+//            }
+//         }
 
          if (qobj) { _objectMap.insert (value, qobj); }
       }
@@ -306,11 +306,11 @@ dmz::JsModuleUiV8QtBasic::create_v8_qwidget (QWidget *value) {
                qobj = new V8QtWidget (vobj, value, &_state);
             }
          }
-         else if (value->inherits ("QWebView")) {
+//         else if (value->inherits ("QWebView")) {
 
-            vobj = _webviewCtor->NewInstance ();
-            qobj = new V8QtWidget (vobj, value, &_state);
-         }
+//            vobj = _webviewCtor->NewInstance ();
+//            qobj = new V8QtWidget (vobj, value, &_state);
+//         }
          else if (value->inherits ("QTreeWidget")) {
 
             if (!_treeWidgetCtor.IsEmpty ()) {
@@ -842,25 +842,25 @@ dmz::JsModuleUiV8QtBasic::update_js_ext_v8_state (const StateEnum State) {
          _gWidgetCtor = V8FunctionPersist::New (_gWidgetTemp->GetFunction ());
       }
 
-      if (!_gWebViewTemp.IsEmpty ()) {
+//      if (!_gWebViewTemp.IsEmpty ()) {
 
-         _gWebViewCtor = V8FunctionPersist::New (_gWebViewTemp->GetFunction ());
-      }
+//         _gWebViewCtor = V8FunctionPersist::New (_gWebViewTemp->GetFunction ());
+//      }
 
-      if (!_webviewTemp.IsEmpty ()) {
+//      if (!_webviewTemp.IsEmpty ()) {
 
-         _webviewCtor = V8FunctionPersist::New (_webviewTemp->GetFunction ());
-      }
+//         _webviewCtor = V8FunctionPersist::New (_webviewTemp->GetFunction ());
+//      }
 
-      if (!_webframeTemp.IsEmpty ()) {
+//      if (!_webframeTemp.IsEmpty ()) {
 
-         _webframeCtor = V8FunctionPersist::New (_webframeTemp->GetFunction ());
-      }
+//         _webframeCtor = V8FunctionPersist::New (_webframeTemp->GetFunction ());
+//      }
 
-      if (!_webpageTemp.IsEmpty ()) {
+//      if (!_webpageTemp.IsEmpty ()) {
 
-         _webpageCtor = V8FunctionPersist::New (_webpageTemp->GetFunction ());
-      }
+//         _webpageCtor = V8FunctionPersist::New (_webpageTemp->GetFunction ());
+//      }
 
       if (!_eventTemp.IsEmpty ()) {
 
@@ -1016,9 +1016,9 @@ dmz::JsModuleUiV8QtBasic::update_js_ext_v8_state (const StateEnum State) {
             "dmz/ui/treeWidget",
             _treeApi.get_new_instance ());
 
-         _state.core->register_interface (
-            "dmz/ui/webView",
-            _webviewApi.get_new_instance ());
+//         _state.core->register_interface (
+//            "dmz/ui/webView",
+//            _webviewApi.get_new_instance ());
 
          _state.core->register_interface (
             "dmz/ui/event",
@@ -1199,11 +1199,11 @@ dmz::JsModuleUiV8QtBasic::update_js_ext_v8_state (const StateEnum State) {
       _gImageCtor.Dispose (); _gImageCtor.Clear ();
       _gPaintDeviceCtor.Dispose (); _gPaintDeviceCtor.Clear ();
       _gWidgetCtor.Dispose (); _gWidgetCtor.Clear ();
-      _gWebViewCtor.Dispose (); _gWebViewCtor.Clear ();
+//      _gWebViewCtor.Dispose (); _gWebViewCtor.Clear ();
 
-      _webviewCtor.Dispose (); _webviewCtor.Clear ();
-      _webframeCtor.Dispose (); _webframeCtor.Clear ();
-      _webpageCtor.Dispose (); _webpageCtor.Clear ();
+//      _webviewCtor.Dispose (); _webviewCtor.Clear ();
+//      _webframeCtor.Dispose (); _webframeCtor.Clear ();
+//      _webpageCtor.Dispose (); _webpageCtor.Clear ();
 
       _gsceneMouseEventCtor.Dispose (); _gsceneMouseEventCtor.Clear ();
       _mouseEventCtor.Dispose (); _mouseEventCtor.Clear ();
@@ -1284,7 +1284,7 @@ dmz::JsModuleUiV8QtBasic::update_js_ext_v8_state (const StateEnum State) {
       _textEditApi.clear ();
       _toolBoxApi.clear ();
       _treeApi.clear ();
-      _webviewApi.clear ();
+//      _webviewApi.clear ();
 
       _phononApi.clear ();
 
@@ -1677,11 +1677,11 @@ dmz::JsModuleUiV8QtBasic::_init (Config &local) {
    _init_gpixmap ();
    _init_gpainter ();
    _init_gwidget ();
-   _init_gwebview ();
+//   _init_gwebview ();
 
-   _init_webview ();
-   _init_webpage ();
-   _init_webframe ();
+//   _init_webview ();
+//   _init_webpage ();
+//   _init_webframe ();
    _init_event ();
    _init_mouse_event ();
    _init_gscene_mouse_event ();

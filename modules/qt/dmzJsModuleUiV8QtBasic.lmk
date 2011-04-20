@@ -66,7 +66,7 @@ lmk.add_files {
    "dmzJsModuleUiV8QtBasicToolBox.cpp",
    "dmzJsModuleUiV8QtBasicTreeWidget.cpp",
    "dmzJsModuleUiV8QtBasicTextEdit.cpp",
-   "dmzJsModuleUiV8QtBasicWebView.cpp",
+--   "dmzJsModuleUiV8QtBasicWebView.cpp",
    "dmzJsModuleUiV8QtBasicWidget.cpp",
    "dmzV8QtAction.cpp",
    "dmzV8QtButton.cpp",
@@ -106,5 +106,10 @@ lmk.add_preqs {
 }
 
 lmkV8.add_libs ()
-lmkQt.add_libs {"QtCore", "QtGui", "QtWebKit", "Phonon"}
+lmkQt.add_libs {
+   "QtCore",
+   "QtGui",
+--   "QtWebKit",
+   "Phonon",
+}
 lmkQt.add_uitools ()

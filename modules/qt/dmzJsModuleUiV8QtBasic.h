@@ -534,7 +534,7 @@ namespace dmz {
          static V8Value _create_gpath_item (const v8::Arguments &Args);
          static V8Value _create_gpixmap_item (const v8::Arguments &Args);
          static V8Value _create_gwidget (const v8::Arguments &Args);
-         static V8Value _create_gwebview (const v8::Arguments &Args);
+//         static V8Value _create_gwebview (const v8::Arguments &Args);
          static V8Value _create_gscene (const v8::Arguments &Args);
          static V8Value _create_gview (const v8::Arguments &Args);
          static V8Value _create_gbrush (const v8::Arguments &Args);
@@ -691,29 +691,29 @@ namespace dmz {
          static V8Value _gwidget_remove_action (const v8::Arguments &Args);
          static V8Value _gwidget_window_title (const v8::Arguments &Args);
 
-         static V8Value _gweb_modified (const v8::Arguments &Args);
-         static V8Value _gweb_load (const v8::Arguments &Args);
-//         static V8Value _gweb_page (const v8::Arguments &Args);
-         static V8Value _gweb_reload (const v8::Arguments &Args);
-         static V8Value _gweb_url (const v8::Arguments &Args);
+//         static V8Value _gweb_modified (const v8::Arguments &Args);
+//         static V8Value _gweb_load (const v8::Arguments &Args);
+////         static V8Value _gweb_page (const v8::Arguments &Args);
+//         static V8Value _gweb_reload (const v8::Arguments &Args);
+//         static V8Value _gweb_url (const v8::Arguments &Args);
 
-         // QWebView bindings implemented in dmzJsModuleUiV8QtBasicWebView.cpp
-         static V8Value _webview_find_text (const v8::Arguments &Args);
-         static V8Value _webview_modified (const v8::Arguments &Args);
-         static V8Value _webview_load (const v8::Arguments &Args);
-         static V8Value _webview_selected_text (const v8::Arguments &Args);
-         static V8Value _webview_text_size_mult (const v8::Arguments &Args);
-         static V8Value _webview_zoom_factor (const v8::Arguments &Args);
-         static V8Value _webview_url (const v8::Arguments &Args);
-         static V8Value _webview_reload (const v8::Arguments &Args);
-         static V8Value _webview_page (const v8::Arguments &Args);
-         static V8Value _create_webview (const v8::Arguments &Args);
+//         // QWebView bindings implemented in dmzJsModuleUiV8QtBasicWebView.cpp
+//         static V8Value _webview_find_text (const v8::Arguments &Args);
+//         static V8Value _webview_modified (const v8::Arguments &Args);
+//         static V8Value _webview_load (const v8::Arguments &Args);
+//         static V8Value _webview_selected_text (const v8::Arguments &Args);
+//         static V8Value _webview_text_size_mult (const v8::Arguments &Args);
+//         static V8Value _webview_zoom_factor (const v8::Arguments &Args);
+//         static V8Value _webview_url (const v8::Arguments &Args);
+//         static V8Value _webview_reload (const v8::Arguments &Args);
+//         static V8Value _webview_page (const v8::Arguments &Args);
+//         static V8Value _create_webview (const v8::Arguments &Args);
 
-         // QWebPage bindings implemented in dmzJsModuleUiV8QtBasicWebView.cpp
-         static V8Value _webpage_mainframe (const v8::Arguments &Args);
+//         // QWebPage bindings implemented in dmzJsModuleUiV8QtBasicWebView.cpp
+//         static V8Value _webpage_mainframe (const v8::Arguments &Args);
 
-         // QWebFrame bindings implemented in dmzJsModuleUiV8QtBasicWebView.cpp
-         static V8Value _webframe_load (const v8::Arguments &Args);
+//         // QWebFrame bindings implemented in dmzJsModuleUiV8QtBasicWebView.cpp
+//         static V8Value _webframe_load (const v8::Arguments &Args);
 
          // QEvent bindings implemented in dmzJsModuleUiV8QtBasicEvent.cpp
          static V8Value _event_type (const v8::Arguments &Args);
@@ -853,10 +853,10 @@ namespace dmz {
          void _init_gpixmap ();
          void _init_gimage ();
          void _init_gwidget ();
-         void _init_gwebview ();
-         void _init_webview ();
-         void _init_webframe ();
-         void _init_webpage ();
+//         void _init_gwebview ();
+//         void _init_webview ();
+//         void _init_webframe ();
+//         void _init_webpage ();
 
          void _init_event ();
          void _init_mouse_event ();
@@ -930,7 +930,7 @@ namespace dmz {
          V8InterfaceHelper _widgetApi;
 
          V8InterfaceHelper _graphApi;
-         V8InterfaceHelper _webviewApi;
+//         V8InterfaceHelper _webviewApi;
          V8InterfaceHelper _eventApi;
 
          V8InterfaceHelper _phononApi;
@@ -1102,17 +1102,17 @@ namespace dmz {
          V8FunctionTemplatePersist _gWidgetTemp;
          V8FunctionPersist _gWidgetCtor;
 
-         V8FunctionTemplatePersist _gWebViewTemp;
-         V8FunctionPersist _gWebViewCtor;
+//         V8FunctionTemplatePersist _gWebViewTemp;
+//         V8FunctionPersist _gWebViewCtor;
 
-         V8FunctionTemplatePersist _webviewTemp;
-         V8FunctionPersist _webviewCtor;
+//         V8FunctionTemplatePersist _webviewTemp;
+//         V8FunctionPersist _webviewCtor;
 
-         V8FunctionTemplatePersist _webpageTemp;
-         V8FunctionPersist _webpageCtor;
+//         V8FunctionTemplatePersist _webpageTemp;
+//         V8FunctionPersist _webpageCtor;
 
-         V8FunctionTemplatePersist _webframeTemp;
-         V8FunctionPersist _webframeCtor;
+//         V8FunctionTemplatePersist _webframeTemp;
+//         V8FunctionPersist _webframeCtor;
 
          V8FunctionTemplatePersist _eventTemp;
          V8FunctionPersist _eventCtor;
