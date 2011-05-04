@@ -5,6 +5,35 @@
 #include <QtWebKit/QWebFrame>
 #include <QtWebKit/QWebPage>
 
+namespace {
+
+   QList<QWebPage *> _webPageList;
+};
+
+
+dmz::V8Value
+dmz::JsModuleUiV8QtBasic::_webpage_clean_pages (const v8::Arguments &Args) {
+
+   v8::HandleScope scope;
+   V8Value result = v8::Undefined ();
+
+   JsModuleUiV8QtBasic *self = _to_self (Args);
+   if (self) {
+
+      QMutableListIterator<QWebPage *> itor (_webPageList);
+
+      while (itor.hasNext ()) {
+
+         QWebPage *page = itor.next ();
+//         delete page;
+         page->networkAccessManager ()->deleteLater ();
+         itor.remove ();
+      }
+   }
+
+   return scope.Close (result);
+}
+
 
 dmz::V8Value
 dmz::JsModuleUiV8QtBasic::_webview_find_text (const v8::Arguments &Args) {
@@ -476,5 +505,7 @@ dmz::JsModuleUiV8QtBasic::_init_webpage () {
    _webviewApi.add_constant ("DontDelegateLinks", (UInt32)QWebPage::DontDelegateLinks);
    _webviewApi.add_constant ("DelegateExternalLinks", (UInt32)QWebPage::DelegateExternalLinks);
    _webviewApi.add_constant ("DelegateAllLinks", (UInt32)QWebPage::DelegateAllLinks);
+
+   _webviewApi.add_function ("cleanWebPages", _webpage_clean_pages, _self);
 }
 
