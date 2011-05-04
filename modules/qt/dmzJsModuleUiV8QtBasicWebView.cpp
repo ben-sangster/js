@@ -309,7 +309,9 @@ dmz::JsModuleUiV8QtBasic::_create_webview (const v8::Arguments &Args) {
 //      view->settings ()->setAttribute (QWebSettings::JavascriptEnabled, true);
 //      view->settings ()->setAttribute (QWebSettings::JavascriptCanAccessClipboard, true);
 //      view->settings ()->setAttribute (QWebSettings::JavascriptCanOpenWindows, true);
-      view->settings ()->setAttribute (QWebSettings::AutoLoadImages, true);
+//      view->settings ()->setAttribute (QWebSettings::AutoLoadImages, true);
+
+      QWebSettings::globalSettings ()->setAttribute (QWebSettings::AutoLoadImages, true);
 
       result = self->create_v8_qobject (view);
    }
