@@ -25,10 +25,10 @@ dmz::JsModuleUiV8QtBasic::_webpage_clean_pages (const v8::Arguments &Args) {
       while (itor.hasNext ()) {
 
          QWebPage *page = itor.next ();
-//         delete page;
          if (page) {
 
             page->networkAccessManager ()->deleteLater ();
+            delete page;
          }
          itor.remove ();
       }
