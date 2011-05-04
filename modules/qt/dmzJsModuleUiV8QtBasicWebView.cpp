@@ -306,11 +306,10 @@ dmz::JsModuleUiV8QtBasic::_create_webview (const v8::Arguments &Args) {
       QWidget *parent (0);
       if (Args.Length ()) { parent = self->_to_qwidget (Args[0]); }
       QWebView *view = new QWebView (parent);
-      view->settings ()->setAttribute (QWebSettings::JavascriptEnabled, true);
-      view->settings ()->setAttribute (QWebSettings::JavascriptCanAccessClipboard, true);
-      view->settings ()->setAttribute (QWebSettings::JavascriptCanOpenWindows, true);
-//      view->settings ()->setAttribute (QWebSettings::PluginsEnabled, true);
-//      view->settings ()->setAttribute (QWebSettings::LocalContentCanAccessRemoteUrls, true);
+//      view->settings ()->setAttribute (QWebSettings::JavascriptEnabled, true);
+//      view->settings ()->setAttribute (QWebSettings::JavascriptCanAccessClipboard, true);
+//      view->settings ()->setAttribute (QWebSettings::JavascriptCanOpenWindows, true);
+
       result = self->create_v8_qobject (view);
    }
 
