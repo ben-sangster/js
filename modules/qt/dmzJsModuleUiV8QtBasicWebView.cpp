@@ -26,7 +26,10 @@ dmz::JsModuleUiV8QtBasic::_webpage_clean_pages (const v8::Arguments &Args) {
 
          QWebPage *page = itor.next ();
 //         delete page;
-         page->networkAccessManager ()->deleteLater ();
+         if (page) {
+
+            page->networkAccessManager ()->deleteLater ();
+         }
          itor.remove ();
       }
    }
@@ -352,6 +355,7 @@ dmz::JsModuleUiV8QtBasic::_create_webview (const v8::Arguments &Args) {
       QWidget *parent (0);
       if (Args.Length ()) { parent = self->_to_qwidget (Args[0]); }
       QWebView *view = new QWebView (parent);
+      if (view) { _webPageList.append (view->page ()); }
 
       result = self->create_v8_qobject (view);
    }
