@@ -5,38 +5,6 @@
 #include <QtWebKit/QWebFrame>
 #include <QtWebKit/QWebPage>
 
-namespace {
-
-   QList<QWebPage *> _webPageList;
-};
-
-
-dmz::V8Value
-dmz::JsModuleUiV8QtBasic::_webpage_clean_pages (const v8::Arguments &Args) {
-
-   v8::HandleScope scope;
-   V8Value result = v8::Undefined ();
-
-   JsModuleUiV8QtBasic *self = _to_self (Args);
-   if (self) {
-
-      QMutableListIterator<QWebPage *> itor (_webPageList);
-
-      while (itor.hasNext ()) {
-
-         QWebPage *page = itor.next ();
-         if (page) {
-
-            page->networkAccessManager ()->deleteLater ();
-            delete page;
-         }
-         itor.remove ();
-      }
-   }
-
-   return scope.Close (result);
-}
-
 
 dmz::V8Value
 dmz::JsModuleUiV8QtBasic::_webview_find_text (const v8::Arguments &Args) {
@@ -355,7 +323,6 @@ dmz::JsModuleUiV8QtBasic::_create_webview (const v8::Arguments &Args) {
       QWidget *parent (0);
       if (Args.Length ()) { parent = self->_to_qwidget (Args[0]); }
       QWebView *view = new QWebView (parent);
-      if (view) { _webPageList.append (view->page ()); }
 
       result = self->create_v8_qobject (view);
    }
@@ -389,6 +356,14 @@ dmz::JsModuleUiV8QtBasic::_init_webview () {
    proto->Set ("forward", v8::FunctionTemplate::New (_webview_forward, _self));
    proto->Set ("stop", v8::FunctionTemplate::New (_webview_stop, _self));
 
+   proto->Set ("frameLoad", v8::FunctionTemplate::New (_webframe_load, _self));
+
+   proto->Set ("linkDelegation", v8::FunctionTemplate::New (_webpage_link_delegation, _self));
+
+   _webviewApi.add_constant ("DontDelegateLinks", (UInt32)QWebPage::DontDelegateLinks);
+   _webviewApi.add_constant ("DelegateExternalLinks", (UInt32)QWebPage::DelegateExternalLinks);
+   _webviewApi.add_constant ("DelegateAllLinks", (UInt32)QWebPage::DelegateAllLinks);
+
    _webviewApi.add_function ("create", _create_webview, _self);
 }
 
@@ -402,31 +377,39 @@ dmz::JsModuleUiV8QtBasic::_webframe_load (const v8::Arguments &Args) {
    JsModuleUiV8QtBasic *self = _to_self (Args);
    if (self) {
 
-      QWebFrame *frame = self->v8_to_qobject<QWebFrame>(Args.This ());
-      if (frame) {
+      QWebView *view = self->v8_to_qobject<QWebView>(Args.This ());
+      if (view) {
 
-         if (Args.Length ()) {
+         QWebPage *page = view->page ();
+         if (page) {
 
-            QUrl url;
-            if (Args[0]->IsString ()) { url.setUrl (v8_to_qstring (Args[0])); }
-            else {
+            QWebFrame *frame = page->mainFrame ();
+            if (frame) {
 
-               QString host, path, queryItem;
-               V8Object obj = v8_to_object (Args[0]);
-               host = v8_to_qstring (obj->Get (v8::String::NewSymbol ("host")));
-               path = v8_to_qstring (obj->Get (v8::String::NewSymbol ("path")));
-               url.setHost (host);
-               url.setPath (path);
-               V8Object queryObj = v8_to_object (obj->Get (v8::String::NewSymbol ("queryItems")));
-               url.addQueryItem ("SERVICE", v8_to_qstring (queryObj->Get(v8::String::NewSymbol ("SERVICE"))));
-               url.addQueryItem ("REQUEST", v8_to_qstring (queryObj->Get(v8::String::NewSymbol ("REQUEST"))));
-               url.addQueryItem ("VERSION", v8_to_qstring (queryObj->Get(v8::String::NewSymbol ("VERSION"))));
-               url.addQueryItem ("SRS", v8_to_qstring (queryObj->Get(v8::String::NewSymbol ("SRS"))));
-               url.addQueryItem ("LAYERS", v8_to_qstring (queryObj->Get(v8::String::NewSymbol ("LAYERS"))));
-               url.addQueryItem ("FORMAT", v8_to_qstring (queryObj->Get(v8::String::NewSymbol ("FORMAT"))));
-               url.addQueryItem ("STYLES", v8_to_qstring (queryObj->Get(v8::String::NewSymbol ("STYLES"))));
+               if (Args.Length ()) {
+
+                  QUrl url;
+                  if (Args[0]->IsString ()) { url.setUrl (v8_to_qstring (Args[0])); }
+                  else {
+
+                     QString host, path, queryItem;
+                     V8Object obj = v8_to_object (Args[0]);
+                     host = v8_to_qstring (obj->Get (v8::String::NewSymbol ("host")));
+                     path = v8_to_qstring (obj->Get (v8::String::NewSymbol ("path")));
+                     url.setHost (host);
+                     url.setPath (path);
+                     V8Object queryObj = v8_to_object (obj->Get (v8::String::NewSymbol ("queryItems")));
+                     url.addQueryItem ("SERVICE", v8_to_qstring (queryObj->Get(v8::String::NewSymbol ("SERVICE"))));
+                     url.addQueryItem ("REQUEST", v8_to_qstring (queryObj->Get(v8::String::NewSymbol ("REQUEST"))));
+                     url.addQueryItem ("VERSION", v8_to_qstring (queryObj->Get(v8::String::NewSymbol ("VERSION"))));
+                     url.addQueryItem ("SRS", v8_to_qstring (queryObj->Get(v8::String::NewSymbol ("SRS"))));
+                     url.addQueryItem ("LAYERS", v8_to_qstring (queryObj->Get(v8::String::NewSymbol ("LAYERS"))));
+                     url.addQueryItem ("FORMAT", v8_to_qstring (queryObj->Get(v8::String::NewSymbol ("FORMAT"))));
+                     url.addQueryItem ("STYLES", v8_to_qstring (queryObj->Get(v8::String::NewSymbol ("STYLES"))));
+                  }
+                  if (!url.isEmpty () && url.isValid ()) { frame->load (url); }
+               }
             }
-            if (!url.isEmpty () && url.isValid ()) { frame->load (url); }
          }
       }
    }
@@ -435,37 +418,37 @@ dmz::JsModuleUiV8QtBasic::_webframe_load (const v8::Arguments &Args) {
 }
 
 
-void
-dmz::JsModuleUiV8QtBasic::_init_webframe () {
+//void
+//dmz::JsModuleUiV8QtBasic::_init_webframe () {
 
-   v8::HandleScope scope;
+//   v8::HandleScope scope;
 
-   _webframeTemp = V8FunctionTemplatePersist::New (v8::FunctionTemplate::New ());
-   _webframeTemp->Inherit (_objectTemp);
+//   _webframeTemp = V8FunctionTemplatePersist::New (v8::FunctionTemplate::New ());
+//   _webframeTemp->Inherit (_objectTemp);
 
-   V8ObjectTemplate instance = _webframeTemp->InstanceTemplate ();
-   instance->SetInternalFieldCount (1);
+//   V8ObjectTemplate instance = _webframeTemp->InstanceTemplate ();
+//   instance->SetInternalFieldCount (1);
 
-   V8ObjectTemplate proto = _webframeTemp->PrototypeTemplate ();
-   proto->Set ("load", v8::FunctionTemplate::New (_webframe_load, _self));
-}
+//   V8ObjectTemplate proto = _webframeTemp->PrototypeTemplate ();
+//   proto->Set ("frameLoad", v8::FunctionTemplate::New (_webframe_load, _self));
+//}
 
 
-dmz::V8Value
-dmz::JsModuleUiV8QtBasic::_webpage_mainframe (const v8::Arguments &Args) {
+//dmz::V8Value
+//dmz::JsModuleUiV8QtBasic::_webpage_mainframe (const v8::Arguments &Args) {
 
-   v8::HandleScope scope;
-   V8Value result = v8::Undefined ();
+//   v8::HandleScope scope;
+//   V8Value result = v8::Undefined ();
 
-   JsModuleUiV8QtBasic *self = _to_self (Args);
-   if (self) {
+//   JsModuleUiV8QtBasic *self = _to_self (Args);
+//   if (self) {
 
-      QWebPage *page = self->v8_to_qobject<QWebPage>(Args.This ());
-      if (page) { result = self->create_v8_qobject(page->mainFrame ()); }
-   }
+//      QWebPage *page = self->v8_to_qobject<QWebPage>(Args.This ());
+//      if (page) { result = self->create_v8_qobject(page->mainFrame ()); }
+//   }
 
-   return scope.Close (result);
-}
+//   return scope.Close (result);
+//}
 
 dmz::V8Value
 dmz::JsModuleUiV8QtBasic::_webpage_link_delegation (const v8::Arguments &Args) {
@@ -476,40 +459,44 @@ dmz::JsModuleUiV8QtBasic::_webpage_link_delegation (const v8::Arguments &Args) {
    JsModuleUiV8QtBasic *self = _to_self (Args);
    if (self) {
 
-      QWebPage *page = self->v8_to_qobject<QWebPage>(Args.This ());
-      if (page) {
+      QWebView *view = self->v8_to_qobject<QWebView>(Args.This ());
+      if (view) {
 
-         if (Args.Length ()) {
-            page->setLinkDelegationPolicy (
-               (QWebPage::LinkDelegationPolicy)v8_to_uint32 (Args[0]));
+         QWebPage *page = view->page ();
+         if (page) {
+
+            if (Args.Length ()) {
+               page->setLinkDelegationPolicy (
+                  (QWebPage::LinkDelegationPolicy)v8_to_uint32 (Args[0]));
+            }
+
+            result = v8::Number::New (page->linkDelegationPolicy ());
          }
-
-         result = v8::Number::New (page->linkDelegationPolicy ());
       }
    }
 
    return scope.Close (result);
 }
 
-void
-dmz::JsModuleUiV8QtBasic::_init_webpage () {
+//void
+//dmz::JsModuleUiV8QtBasic::_init_webpage () {
 
-   v8::HandleScope scope;
+//   v8::HandleScope scope;
 
-   _webpageTemp = V8FunctionTemplatePersist::New (v8::FunctionTemplate::New ());
-   _webpageTemp->Inherit (_objectTemp);
+//   _webpageTemp = V8FunctionTemplatePersist::New (v8::FunctionTemplate::New ());
+//   _webpageTemp->Inherit (_objectTemp);
 
-   V8ObjectTemplate instance = _webpageTemp->InstanceTemplate ();
-   instance->SetInternalFieldCount (1);
+//   V8ObjectTemplate instance = _webpageTemp->InstanceTemplate ();
+//   instance->SetInternalFieldCount (1);
 
-   V8ObjectTemplate proto = _webpageTemp->PrototypeTemplate ();
-   proto->Set ("mainFrame", v8::FunctionTemplate::New (_webpage_mainframe, _self));
-   proto->Set ("linkDelegation", v8::FunctionTemplate::New (_webpage_link_delegation, _self));
+//   V8ObjectTemplate proto = _webpageTemp->PrototypeTemplate ();
+//   proto->Set ("mainFrame", v8::FunctionTemplate::New (_webpage_mainframe, _self));
+//   proto->Set ("linkDelegation", v8::FunctionTemplate::New (_webpage_link_delegation, _self));
 
-   _webviewApi.add_constant ("DontDelegateLinks", (UInt32)QWebPage::DontDelegateLinks);
-   _webviewApi.add_constant ("DelegateExternalLinks", (UInt32)QWebPage::DelegateExternalLinks);
-   _webviewApi.add_constant ("DelegateAllLinks", (UInt32)QWebPage::DelegateAllLinks);
+//   _webviewApi.add_constant ("DontDelegateLinks", (UInt32)QWebPage::DontDelegateLinks);
+//   _webviewApi.add_constant ("DelegateExternalLinks", (UInt32)QWebPage::DelegateExternalLinks);
+//   _webviewApi.add_constant ("DelegateAllLinks", (UInt32)QWebPage::DelegateAllLinks);
 
-   _webviewApi.add_function ("cleanWebPages", _webpage_clean_pages, _self);
-}
+//   _webviewApi.add_function ("cleanWebPages", _webpage_clean_pages, _self);
+//}
 

@@ -1680,8 +1680,8 @@ dmz::JsModuleUiV8QtBasic::_init (Config &local) {
    _init_gwebview ();
 
    _init_webview ();
-   _init_webpage ();
-   _init_webframe ();
+//   _init_webpage ();
+//   _init_webframe ();
    _init_event ();
    _init_mouse_event ();
    _init_gscene_mouse_event ();

@@ -862,8 +862,8 @@ namespace dmz {
          void _init_gwidget ();
          void _init_gwebview ();
          void _init_webview ();
-         void _init_webframe ();
-         void _init_webpage ();
+//         void _init_webframe ();
+//         void _init_webpage ();
 
          void _init_event ();
          void _init_mouse_event ();
